@@ -48,14 +48,14 @@ for line in Lines:
 
 
 
-log.info("VERTEX")
+log.info("VERTEX data after reading in")
 for j in reversed(range(1,num_vertex)):
     log_info = [f"{vertex[i][j]}" for i in range(1,num_vertex)]
     log.info(f"j={j} {log_info}")  
 
 log.info("")
 
-log.info("RESULTS")
+log.info("RESULTS initializations")
 results = [[[max_value for j in range(num_vertex)] for i in range(num_vertex)] for k in range(num_vertex)]
 
 for i in range(1,num_vertex):
@@ -67,13 +67,16 @@ for i in range(1,num_vertex):
         else:
             results[0][i][j] == max_value
 
-log.debug("START")
+log.debug("Display Results after init ")
 for k in range(0,end):
     for j in reversed(range(1,num_vertex)):
+        log.debug(f"Show k {k},j {j}")
         log_info =  [f"{results[k][i][j]:3}" for i in range(1,num_vertex)]
         log.debug(f"k={k}  j={j} {log_info}")
-    log.debug("--------\n")
+    log.debug(f"End -------- k{k} j{j}\n")
 
+
+log.debug("Start Processing")
 
 for k in range(1,end):
     log.debug(f"k={k}")
@@ -94,7 +97,14 @@ for k in range(1,end):
             log.debug(f"                 v1 {value1} v2 {value2} result: {results[k][i][j]}")
     log.debug("")
     for j in reversed(range(1,num_vertex)):
+        print("1 per line")
+        for i in range(1,num_vertex):
+            result = results[k][i][j]
+            log.debug(f"     k={k}  j={j} result={}")   
+                
+        print("consolidated")
         log.debug(f"k={k}  j={j}",  [f"{results[k][i][j]:3}" for i in range(1,num_vertex)])
+
 
 print("\nFinal")
 for k in range(0,end):
