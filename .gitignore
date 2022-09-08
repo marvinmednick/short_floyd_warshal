@@ -15,5 +15,8 @@ bf
 # files for saving output for review
 output*
 
+# link to test cases
+tcs
+
 #office files open
 ~*

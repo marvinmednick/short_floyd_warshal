@@ -44,9 +44,13 @@ for line in Lines:
     count += 1
     log.debug(f"Line is {line}")
     m = vertex_regex.match(line.strip())
-    vertex[int(m.group('start'))][int(m.group('end'))] = int(m.group('weight'))
+    i_index = int(m.group('start'))
+    j_index = int(m.group('end'))
+    weight = int(m.group('weight'))
 
-
+    if vertex[i_index][j_index] == max_value or weight < vertex[i_index][j_index]:
+        vertex[i_index][j_index] = weight
+    
 
 log.info("VERTEX data after reading in")
 for j in reversed(range(1,num_vertex)):
@@ -61,7 +65,16 @@ results = [[[max_value for j in range(num_vertex)] for i in range(num_vertex)] f
 for i in range(1,num_vertex):
     for j in range(1,num_vertex):
         if i == j:
-            results[0][i][j] = 0
+            # if there is a negative weight path defined from this 
+            # vertex to itself, then use that as the starting point 
+            # (this graph will have a negative cycle)
+            log.debug(f"Init {i} {j} {vertex[i][j]}")
+            if vertex[i][j] != max_value and vertex[i][j] < 0:
+                results[0][i][j] = vertex[i][j]
+            else:
+                # otherwise the starting point is 0
+                results[0][i][j] = 0
+
         elif vertex[i][j] != max_value:
             results[0][i][j] = vertex[i][j]
         else:
@@ -97,17 +110,18 @@ for k in range(1,end):
             log.debug(f"                 v1 {value1} v2 {value2} result: {results[k][i][j]}")
     log.debug("")
     for j in reversed(range(1,num_vertex)):
-        print("1 per line")
         for i in range(1,num_vertex):
             result = results[k][i][j]
-            log.debug(f"     k={k}  j={j} result={}")   
+            log.debug(f"     k={k}  j={j} result={result}")   
                 
-        print("consolidated")
-        log.debug(f"k={k}  j={j}",  [f"{results[k][i][j]:3}" for i in range(1,num_vertex)])
+        debug_row = "".join([f"{results[k][i][j]:3} " for i in range(1,num_vertex)]);
+        log.debug(f"k={k}  j={j} => {debug_row}")
 
 
-print("\nFinal")
+print("\nFinal Matrix")
 for k in range(0,end):
+    print(f"Vertex #",[f"{i:3}" for i in range(1,num_vertex)])
+    print("--------"*num_vertex,)
     for j in reversed(range(1,num_vertex)):
         print(f"k={k}  j={j}",  [f"{results[k][i][j]:3}" for i in range(1,num_vertex)])
     print("--------\n")
